@@ -1,70 +1,187 @@
-import React, { useContext } from 'react'
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import courseData from '../data/courseData'
+import React, { useContext, useState } from 'react'
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Dimensions, ImageBackground } from 'react-native'
 import { CartContext } from '../App'
+import { COLORS, SIZES } from '../constants/theme'
+import Feather from '@expo/vector-icons/Feather'
+import { useNavigation } from '@react-navigation/native'
 
-const CourseDetail = () => {
-  const navigation = useNavigation()
-  const route = useRoute()
+const { width } = Dimensions.get('window')
+
+const CourseDetail = ({ route }) => {
+  const { course } = route.params
   const { addItem } = useContext(CartContext)
-  const { course } = route.params || {}
+  const navigation = useNavigation()
+  const [activeTab, setActiveTab] = useState('About')
 
-  if (!course) {
-    return (
-      <SafeAreaView style={styles.center}>
-        <Text>No course selected.</Text>
-      </SafeAreaView>
-    )
-  }
+  const tabs = ['About', 'Curriculum', 'Reviews']
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image source={{ uri: course.image }} style={styles.image} resizeMode="cover" />
-        <View style={styles.card}>
-          <Text style={styles.title}>{course.title}</Text>
-          <Text style={styles.tag}>Level: {course.level} • Duration: {course.duration}</Text>
-          <Text style={styles.price}>{course.price}  •  ⭐ {course.rating}</Text>
-          <Text style={styles.desc}>{course.description}</Text>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <TouchableOpacity style={styles.buyBtn} onPress={() => { addItem(course); navigation.getParent()?.navigate('Cart') }}>
-              <Text style={styles.buyBtnText}>Add to Cart</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.buyBtn, { backgroundColor: '#111' }]} onPress={() => navigation.getParent()?.navigate('Checkout')}>
-              <Text style={styles.buyBtnText}>Buy Now</Text>
-            </TouchableOpacity>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        {/* Hero Image */}
+        <ImageBackground source={{ uri: course.image }} style={{ width: '100%', height: 300, justifyContent: 'flex-end' }}>
+          <View style={styles.overlay}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{course.level}</Text>
+            </View>
+            <Text style={styles.title}>{course.title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+              <Feather name="star" size={16} color={COLORS.warning} />
+              <Text style={{ color: COLORS.white, marginLeft: 4, fontWeight: 'bold' }}>{course.rating} (1.2k Reviews)</Text>
+            </View>
           </View>
-        </View>
-        <View style={{ marginTop: 18 }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 8 }}>Related Courses</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {courseData.filter(c => c.level === course.level && c.id !== course.id).map(rc => (
-              <TouchableOpacity key={rc.id} onPress={() => navigation.push('courseDetails', { course: rc })} style={{ marginRight: 12, width: 220 }}>
-                <Image source={{ uri: rc.image }} style={{ width: 220, height: 120, borderRadius: 8 }} />
-                <Text numberOfLines={1} style={{ fontWeight: '700', marginTop: 6 }}>{rc.title}</Text>
-                <Text style={{ color: '#666' }}>{rc.price} • ⭐{rc.rating}</Text>
+        </ImageBackground>
+
+        {/* Content */}
+        <View style={{ padding: 24 }}>
+          {/* Instructor */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
+            <Image source={{ uri: 'https://i.pravatar.cc/100?img=3' }} style={{ width: 48, height: 48 }} />
+            <View style={{ marginLeft: 12 }}>
+              <Text style={{ color: COLORS.text, fontWeight: 'bold', fontSize: 16 }}>Dr. Angela Yu</Text>
+              <Text style={{ color: COLORS.textSecondary }}>Lead Instructor</Text>
+            </View>
+          </View>
+
+          {/* Tabs */}
+          <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: COLORS.border, marginBottom: 24 }}>
+            {tabs.map(tab => (
+              <TouchableOpacity
+                key={tab}
+                onPress={() => setActiveTab(tab)}
+                style={[styles.tab, activeTab === tab && styles.activeTab]}
+              >
+                <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>{tab}</Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </View>
+
+          {/* Tab Content */}
+          <View>
+            <Text style={{ color: COLORS.textSecondary, lineHeight: 24, fontSize: 15 }}>
+              This course is designed to take you from a complete beginner to a professional developer. You will learn everything you need to know to build stunning applications.
+              {'\n\n'}
+              • Master the fundamentals
+              {'\n'}• Build real-world projects
+              {'\n'}• Get hired as a developer
+            </Text>
+
+            <View style={{ marginTop: 24 }}>
+              <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>Course Content</Text>
+              {[1, 2, 3, 4].map((item, index) => (
+                <View key={index} style={styles.lessonItem}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={styles.lessonNumber}>
+                      <Text style={{ color: COLORS.textSecondary, fontWeight: 'bold' }}>0{item}</Text>
+                    </View>
+                    <View style={{ marginLeft: 16 }}>
+                      <Text style={{ color: COLORS.text, fontWeight: '600' }}>Introduction to the Course</Text>
+                      <Text style={{ color: COLORS.textSecondary, fontSize: 12 }}>12 mins</Text>
+                    </View>
+                  </View>
+                  <Feather name="play-circle" size={24} color={COLORS.primary} />
+                </View>
+              ))}
+            </View>
+          </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+
+      {/* Sticky Bottom Bar */}
+      <View style={styles.bottomBar}>
+        <View>
+          <Text style={{ color: COLORS.textSecondary, fontSize: 12 }}>Total Price</Text>
+          <Text style={{ color: COLORS.text, fontSize: 24, fontWeight: 'bold' }}>{course.price}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.enrollBtn}
+          onPress={() => {
+            addItem(course)
+            navigation.navigate('Cart')
+          }}
+        >
+          <Text style={{ color: COLORS.white, fontWeight: 'bold', fontSize: 16 }}>Enroll Now</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-  image: { width: '100%', height: 220, borderRadius: 8 },
-  card: { marginTop: 12, backgroundColor: '#fff', padding: 16, borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 2 },
-  title: { fontSize: 20, fontWeight: '700', marginBottom: 6 },
-  tag: { color: '#666', marginBottom: 8 },
-  price: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
-  desc: { color: '#333', lineHeight: 20, marginBottom: 14 },
-  buyBtn: { backgroundColor: '#7C3AED', padding: 12, borderRadius: 8, alignItems: 'center' },
-  buyBtnText: { color: '#fff', fontWeight: '700' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' }
-})
-
 export default CourseDetail
+
+const styles = StyleSheet.create({
+  overlay: {
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%'
+  },
+  badge: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+    marginBottom: 8
+  },
+  badgeText: {
+    color: COLORS.white,
+    fontWeight: 'bold',
+    fontSize: 12
+  },
+  title: {
+    color: COLORS.white,
+    fontSize: 28,
+    fontWeight: 'bold',
+    lineHeight: 34
+  },
+  tab: {
+    marginRight: 24,
+    paddingBottom: 12
+  },
+  activeTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: COLORS.primary
+  },
+  tabText: {
+    color: COLORS.textSecondary,
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  activeTabText: {
+    color: COLORS.primary
+  },
+  lessonItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.surface,
+    padding: 16,
+    marginBottom: 12,
+  },
+  lessonNumber: {
+    width: 32,
+    height: 32,
+    backgroundColor: COLORS.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: COLORS.surface,
+    padding: 24,
+    paddingBottom: 34,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border
+  },
+  enrollBtn: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+  }
+})

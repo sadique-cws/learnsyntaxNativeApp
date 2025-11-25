@@ -6,7 +6,7 @@ const courseData = [
         duration: "6 weeks",
         level: "Beginner",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/68909295489e6_cK6IomukT.png",
-        price: "$29",
+        price: "₹29",
         rating: 4.5
     },
     {
@@ -16,7 +16,7 @@ const courseData = [
         duration: "12 weeks",
         level: "Intermediate",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/689ac8aa2b3e4_12wn542j6.png",
-        price: "$99",
+        price: "₹99",
         rating: 4.7
     },
     {
@@ -26,7 +26,7 @@ const courseData = [
         duration: "10 weeks",
         level: "Advanced",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/68c8f45295a69_dz-lVixQF.png",
-        price: "$149",
+        price: "₹149",
         rating: 4.8
     },
     {
@@ -36,7 +36,7 @@ const courseData = [
         duration: "8 weeks",
         level: "Intermediate",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/IMG-20250506-WA0004__JmE63QuAd.jpg",
-        price: "$119",
+        price: "₹119",
         rating: 4.4
     },
     {
@@ -46,7 +46,7 @@ const courseData = [
         duration: "5 weeks",
         level: "Beginner",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/C_Programming__3__-HAA7yrsc.png",
-        price: "$39",
+        price: "₹39",
         rating: 4.3
     },
     {
@@ -55,8 +55,8 @@ const courseData = [
         description: "Learn how to deploy and manage applications on Amazon Web Services.",
         duration: "7 weeks",
         level: "Advanced",
-        image: "https://example.com/images/aws-cloud.jpg",
-        price: "$159",
+        image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/C_Programming__3__-HAA7yrsc.png",
+        price: "₹159",
         rating: 4.6
     },
     {
@@ -66,7 +66,7 @@ const courseData = [
         duration: "11 weeks",
         level: "Advanced",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/C_Programming__5__e_kNNSYjD.png",
-        price: "$199",
+        price: "₹199",
         rating: 4.9
     },
     {
@@ -76,7 +76,7 @@ const courseData = [
         duration: "4 weeks",
         level: "Beginner",
         image: "https://ik.imagekit.io/healingtouchpurnea/cws/course_images/C_Programming__5__e_kNNSYjD.png",
-        price: "$49",
+        price: "₹49",
         rating: 4.2
     }
 ];
